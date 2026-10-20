@@ -1,0 +1,50 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+
+  test:
+    name: dotnet test (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: project-wutong/wutong-core
+          path: wutong-core
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with: {workspaces: wutong-core}
+      - run: cargo build --release --locked -p wutong-ffi
+        working-directory: wutong-core
+      - uses: actions/setup-dotnet@v4
+        with: {dotnet-version: "8.0.x"}
+      - run: dotnet build -c Release
+      - name: Stage native library
+        shell: bash
+        run: |
+          out=tests/Wutong.Tests/bin/Release/net8.0
+          cp wutong-core/target/release/*wutong_ffi.{so,dylib,dll} "$out"/ 2>/dev/null || true
+          ls "$out" | grep -i wutong_ffi
+      - run: dotnet test -c Release --no-build
+  format:
+    name: dotnet format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with: {dotnet-version: "8.0.x"}
+      - run: dotnet format --verify-no-changes
