@@ -20,8 +20,8 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
         with:
           repository: project-wutong/wutong-core
           path: wutong-core
@@ -44,7 +44,7 @@ jobs:
     name: dotnet format
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - uses: actions/setup-dotnet@v4
         with: {dotnet-version: "8.0.x"}
       - run: dotnet format --verify-no-changes
