@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageId>Wutong</PackageId>
+    <Version>0.1.0</Version>
+    <Description>Wutong Protocol SDK for .NET (P/Invoke over the Rust core's C ABI)</Description>
+    <PackageLicenseExpression>AGPL-3.0-only</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/project-wutong/wutong-sdk-csharp</RepositoryUrl>
+  </PropertyGroup>
+</Project>
